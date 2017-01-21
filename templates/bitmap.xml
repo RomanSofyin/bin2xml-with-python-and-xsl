@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+<!-- 
+     bitmap.xml
+     Example template file for bin2xml, facilitating processing of 
+     bitmap files in the BITMAPINFOHEADER or BITMAPCOREHEADER formats
+     
+     Format from: http://en.wikipedia.org/wiki/BMP_file_format
+     
+     Copyright  Brian Starkey 2013
+     email:     stark3y[AT]gmail.com
+       web:     http://usedbytes.com
+-->
+
+
+<formats name="Bitmap File">
+    <template name="BITMAPINFOHEADER">
+        <!-- Header -->
+        <field name="magic">
+            BM
+        </field>
+        <field name="file_size" length="4" format="=I"/>
+        <field name="reserved" length="4"/>
+        <field name="data_offset" length="4" format="=I"/>
+        
+        <!-- DIB Header -->
+        <field name="dib_size" length="4" format="=I">
+            40
+        </field>
+        <field name="width" length="4" format="=I"/>
+        <field name="height" length="4" format="=I"/>
+        <field name="planes" length="2" format="=H">
+            1
+        </field>
+        <field name="bpp" length="2" format="=H"/>
+        <field name="compression" length="4" format="=I"/>
+        <field name="data_size" length="4" format="=I"/>
+        <field name="hres" length="4" format="=I"/>
+        <field name="vres" length="4" format="=I"/>
+        <field name="colours" length="4" format="=I"/>
+        <field name="icolours" length="4" format="=I"/>
+        
+        <!-- Image Data -->
+        <field name="data" length="$data_size"/>
+    </template>
+
+    <template name="BITMAPCOREHEADER">
+        <!-- Header -->
+        <field name="magic">
+            BM
+        </field>
+        <field name="file_size" format="=I"/>
+        <field name="reserved" length="4"/>
+        <field name="data_offset" length="4" format="=I"/>
+        
+        <!-- DIB Header -->
+        <field name="dib_size" length="4" format="=I">
+            12
+        </field>
+        <field name="width" length="2" format="=H"/>
+        <field name="height" length="2" format="=H"/>
+        <field name="planes" length="2" format="=H">
+            1
+        </field>
+        <field name="bpp" length="2" format="=H"/>
+        
+        <!-- Image Data -->
+        <field name="data"/>
+    </template>
+
+</formats>

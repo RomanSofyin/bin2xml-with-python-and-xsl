@@ -1,0 +1,158 @@
+bin2xml - Writing Templates
+======================================
+Copyright Brian Starkey 2013
+  web: http://usedbytes.com/software/bin2xml
+email: stark3y[AT]gmail.com
+
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+
+
+bin2xml works using template definition files. This is a simple XML file
+format, which defines how the data in the input file is layed out.
+A simple example for a packet which looks like this:
+
+| Header (2 bytes) | Length (1 byte) | Data (depends on length) | Tail (1 byte) |
+|    0xDE 0xAD     |        *        |  *********************   |      0xFF     |
+
+would have a template file like this:
+
+<formats name="Example format file">
+    
+    <template name="Example Packet">
+        <field name="header" preferhex="yes">
+            0xDE 0xAD
+        </field>
+        <field name="length" length="1" />
+        <field name="data" length="$length"/>
+        <field name="tail" format="B">
+            0xFF
+        </field>
+    
+    </template>
+
+</formats>
+
+NOTE: A name is always required.
+
+Any field with a defined value is fixed. bin2xml will try to use these
+to identify packets.
+
+The length attribute is optional - to a point. bin2xml must be able to 
+figure out the length of a field. For instance, in the case of the header
+field above, bin2xml will figure out that it is 2 bytes long (from the
+2 defined values). Equaly, you can use a variable (like for data here)
+which will try to use the value of another field. This can only work
+if that field already has a value by the time the variable field is parsed.
+If the field following a field with undefined length has a fixed value,
+this is also OK. bin2xml will keep going until it hits the defined value,
+and assume the preceeding data belongs to the field with undefined length.
+Finally, if a field is the last in a packet, and has no length, bin2xml
+will consume the rest of the file, and place it into that field.
+
+The preferhex attribute means bin2xml will print the hex values of its
+data even if the data is printable. Otherwise, it will try to use the
+format string (which defaults to 'c') - more on that below.
+
+The format string defines the data contained in the field. It loosely
+follows the Python struct definitions, with some important differences.
+    * Numbers (used to repeat formats) are not permitted
+    * A single format character will automatically repeat to the 
+      length of the field (i.e. you can use 'c' for a string)
+    * The 's' format is used as a special case, taking a literal copy
+      of the field value, INCLUDING WHITESPACE
+A numeric format such as B or b will always be printed as a decimal number,
+character formats such as "c" will be printed as a string only if all the
+characters are printable, otherwise the hexadecimal representation will
+be displayed.
+      
+Here are some format examples:
+
+    * <field name="counter" length="2" format="=H">1234</field>
+      "This field will contain two bytes as an unsigned, 16-bit integer
+       equalling one-thousand, two-hundred and thirty four."
+     
+    * <field name="EOL" format="s">
+</field>
+     "This field will contain a single EOL character"
+    
+A field may have several defined values (all of which must be named)
+
+    <field name="i2c_address">
+        <value name="RTC">0xA4</field>
+        <value name="EEPROM">0x22</field>
+        <allowothers/>
+    </field>
+
+If a defined, named value can be resolved, it will be put in the output.
+For example, the output for this format might looks something like:
+
+    i2c_address:    0xA4 = RTC
+    ...
+    ...
+    
+    i2c_address:    0x22 = EEPROM
+    
+The <allowothers/> tag means that other values (that aren't defined) are
+OK too.
+
+
+Multiple templates are useful if you have more than one packet format.
+For instance an error packet might start with 0cFF 0x00, and a normal one
+with 0xFF 0x01:
+
+<formats name="Example format file">
+    
+    <template name="Error packet">
+        <field name="header" preferhex="yes">
+            0xFF
+        </field>
+        <field name="packet_type" preferhex="yes">
+            0x00
+        </field>
+        ...
+        ...
+    </template>
+
+    <template name="Normal packet">
+        <field name="header" preferhex="yes">
+            0xFF
+        </field>
+        <field name="packet_type" preferhex="yes">
+            0x01
+        </field>
+        ...
+        ...
+    </template>
+
+    <template name="Other packet">
+        <field name="header" preferhex="yes">
+            0xFF
+        </field>
+        <field name="packet_type" preferhex="yes">
+            <value name="warning">
+                0x02
+            </value>
+            <allowothers/>
+        </field>
+        ...
+        ...
+    </template>
+
+</formats>
+
+Note the "default" packet at the end. This is like "default" on a switch
+statement. It will be tried only if the above two templates do not match,
+and can accept any value as the packet type field.

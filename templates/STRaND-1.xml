@@ -1,0 +1,82 @@
+<?xml version="1.0" ?>
+<!-- 
+     STRaND-1.xml
+     Example template file for bin2xml, facilitating processing of 
+     STRaND-1 telemtry beacon packets
+     
+     Format from: http://amsat-uk.org/satellites/strand-1/strand-1-telemetry/
+     
+     Copyright  Brian Starkey 2013
+     email:     stark3y[AT]gmail.com
+       web:     http://usedbytes.com
+-->
+
+<formats name="STRaND-1 Beacon Packets">
+    
+    <template name="Modem Beacon TM">
+        <field name="tnc_flag" length="2">
+            0xC0 0x00
+        </field>
+        <field name="hdlc_flag" length="3" format="B">
+            0xDB 0xDC 0x80
+        </field>
+        <field name="counter" length="1" format="=B"/>
+        <field name="length" length="1" format="B"/>
+        <field name="id" length="1" format="B">
+            0x01
+        </field>
+        <field name="channel" length="1" format="B" preferhex="yes">
+            <value name="TIME_SINCE_LAST">0xE0</value>
+            <value name="PACKETS_UP_COUNT">0xE1</value>
+            <value name="PACKETS_DOWN_COUNT">0xE2</value>
+            <value name="PACKETS_UP_DROPPED">0xE3</value>
+            <value name="PACKETS_DOWN_DROPPED">0xE4</value>
+        </field>
+        <field name="telemetry" length="4" format="c"/>
+        <field name="crc-itt" length="1" format="B"/>
+        <field name="tnc_tail" length="1">
+            0xC0
+        </field>
+    </template>
+    
+    <template name="OBC Beacon TM">
+        <field name="tnc_flag" length="2">
+            0xC0 0x00
+        </field>
+        <field name="hdlc_flag" length="3">
+            0xDB 0xDC 0x80
+        </field>
+        <field name="counter" length="1" format='B'/>
+        <field name="length" length="1" format="B"/>
+        <field name="id" length="1" format="B">
+            0x02
+        </field>
+        <field name="node_addr" length="1" format="B" preferhex="yes">
+            <value name="EPS">0x2C</value>
+            <value name="BATTERY">0x2D</value>
+            <value name="SWITCH_BOARD">0x66</value>
+        </field>
+        <field name="node_channel" length="1" format="B" preferhex="yes"/>
+        <field name="data_size" length="1" format="B"/>
+        <field name="data" length="$data_size" format="B"/>
+        <field name="tnc_tail" length="1">
+            0xC0
+        </field>
+    </template>
+    
+    <template name="UNKNOWN">
+        <field name="tnc_flag" length="2">
+            0xC0 0x00
+        </field>
+        <field name="hdlc_flag" length="3">
+            0xDB 0xDC 0x80
+        </field>
+        <field name="counter" length="1" format='B'/>
+        <field name="length" length="1" format="B"/>
+        <field name="data" length="$length"/>
+        <field name="tnc_tail" length="1">
+            0xC0
+        </field>
+    </template>
+
+</formats>

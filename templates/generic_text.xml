@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<formats name="Generic Text File Parser">
+    <template name="Generic">
+        <!-- Header -->
+        <field name="data" format='c'/>
+        <field name="eol" format='s'>
+</field>
+    </template>
+
+</formats>

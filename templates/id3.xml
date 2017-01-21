@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<formats name="ID3 Tag">
+    
+    <template name="ID3v1 Extended">
+        <field name="header" format='c'>
+            TAG+
+        </field>
+        <field name="title" length="60" format='c'/>
+        <field name="artist" length="60" format='c'/>
+        <field name="album" length="60" format='c'/>
+        <field name="speed" length="1" format="B"/>
+        <field name="genre" length="30" format='c'/>
+        <field name="start_time_m" length="3" format='c'/>
+        <field name="start_colon">:</field>
+        <field name="start_time_s" length="2" format='c'/>
+        <field name="end_time_m" length="3" format='c'/>
+        <field name="end_colon">:</field>
+        <field name="end_time_s" length="2" format='c'/>
+        <field name="track" length="1" format="B"/>
+        <field name="genre_index" length="1" format="B"/>
+    </template>
+    
+    <template name="ID3v1 with Track">
+        <field name="header" format='c'>
+            TAG
+        </field>
+        <field name="title" length="30" format='c'/>
+        <field name="artist" length="30" format='c'/>
+        <field name="album" length="30" format='c'/>
+        <field name="year" length="4"/>
+        <field name="comment" length="30" format='c'/>
+        <field name="zero" format='B'>0x00</field>
+        <field name="track" length="1" format="B"/>
+        <field name="genre_index" length="1" format="B"/>
+    </template>
+
+    <template name="ID3v1 no Track">
+        <field name="header" format='c'>
+            TAG
+        </field>
+        <field name="title" length="30" format='c'/>
+        <field name="artist" length="30" format='c'/>
+        <field name="album" length="30" format='c'/>
+        <field name="year" length="4"/>
+        <field name="comment" length="30" format='c'/>
+        <field name="zero" length = "1" format='B'/>
+        <field name="invalid" length="1" format="B"/>
+        <field name="genre_index" length="1" format="B"/>
+    </template>
+
+</formats>

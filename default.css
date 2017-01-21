@@ -1,0 +1,62 @@
+/*
+ *  default.css
+ *  Default stylesheet for processing output from parse_binary 
+ *   
+ *   Copyright  Brian Starkey 2013
+ *   email:     stark3y[AT]gmail.com
+ *     web:     http://usedbytes.com
+ */
+
+body {
+    font-family: sans;
+}
+
+table.packet {
+    border: 1px solid red;
+}
+
+th.packet_header {
+    text-align: left;
+    border-bottom: 2px solid black;
+    background-color: #ff6262;
+    
+}
+
+td.field_header {
+    background-color: #EEEEEE;
+    font-weight: bold;
+    font-size: smaller;
+    text-align: center;
+    border-bottom: 1px solid #666666;
+    border-right: 1px solid #666666;
+    border-collapse: collapse;
+    padding: 2px;
+}
+
+td.field_header:last-child {
+    border-right: none;
+}
+
+tr.field:nth-child(odd) { 
+    background-color:#edbebe; 
+}
+
+tr.field:nth-child(even) {
+    background-color:#ffe8e8; 
+}
+
+td.field_name {
+    font-weight: bold;
+}
+
+td.field_length {
+    text-align: center;
+}
+
+td.field_format {
+    text-align: center;
+}
+
+td.field_data {
+    font-family: mono;
+}

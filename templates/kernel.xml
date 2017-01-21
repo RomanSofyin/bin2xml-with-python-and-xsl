@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<formats name="Kernel Log">
+    <template name="Kernel Message">
+        
+        <field name="timestamp" format="c" length="16"/>
+        <field name="hostname" format="c"/>
+        <field name="delim" format="s"> </field>
+        <field name="label" format="s">kernel: </field>
+        <field name="delim" format="s">[</field>
+        <field name="ticks" format="c"/>
+        <field name="delim" format="s">]</field>
+        <field name="message" format="c"/>
+        <field name="EOL" format="s">
+</field>
+    
+    </template>
+</formats>
