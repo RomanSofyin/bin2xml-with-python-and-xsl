@@ -59,3 +59,6 @@ the XML file
 
 Broadly speaking, a bin2xml command will look something like this:
 ./bin2xml.py format_file.xml -i binary_data.log -t -o pretty_output.html
+
+
+<sub><a target="_blank" href="https://paypal.me/e1adkarak0" rel="nofollow"><img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" width="60" height="16" border="0" alt="PayPal Donation"></a></sub>
